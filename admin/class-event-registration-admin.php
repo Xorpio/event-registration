@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'WPINC' ) ) { die; }
 
 /**
  * The admin-specific functionality of the plugin.

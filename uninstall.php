@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'WPINC' ) ) { die; }
 
 /**
  * Fired when the plugin is uninstalled.

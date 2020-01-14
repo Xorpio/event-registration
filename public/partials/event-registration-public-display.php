@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'WPINC' ) ) { die; }
 
 /**
  * Provide a public-facing view for the plugin

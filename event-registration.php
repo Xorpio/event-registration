@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'WPINC' ) ) { die; }
 
 /**
  * The plugin bootstrap file
