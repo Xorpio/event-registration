@@ -56,6 +56,7 @@ class Event_Registration_Admin {
 		$this->version = $version;
 
         require_once plugin_dir_path( __FILE__ ) . 'Models/class-list-table.php';
+        require_once plugin_dir_path( __FILE__ ) . 'Models/EventTable.php';
         require_once plugin_dir_path( __FILE__ ) . 'partials/event-registration-admin-display.php';
 	}
 
@@ -79,7 +80,6 @@ class Event_Registration_Admin {
 		 */
 
 		wp_enqueue_style( $this->event_registration, plugin_dir_url( __FILE__ ) . 'css/event-registration-admin.css', array(), $this->version, 'all' );
-
 	}
 
 	/**

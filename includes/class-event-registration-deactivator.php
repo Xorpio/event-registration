@@ -26,24 +26,13 @@ if ( ! defined( 'WPINC' ) ) { die; }
  */
 class Event_Registration_Deactivator {
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
-	 */
-	public static function deactivate() {
-        self::deleteTable();
+    /**
+     * Short Description. (use period)
+     *
+     * Long Description.
+     *
+     * @since    1.0.0
+     */
+    public static function deactivate() {
     }
-
-    private static function deleteTable() {
-        global $wpdb;
-
-        $table_name = $wpdb->prefix . 'er_events';
-        $wpdb->query( "DROP TABLE IF EXISTS {$table_name}" );
-
-        delete_option("event_reg_db_version");
-    }
-
 }

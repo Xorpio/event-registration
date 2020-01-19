@@ -127,6 +127,7 @@ class Event_Registration_Loader {
             add_action( $hook['hook'], array( $hook['component'], $hook['callback'] ), $hook['priority'], $hook['accepted_args'] );
         }
 
+        require_once plugin_dir_path( __FILE__ ) . '../Event/Queries/ListEventsQuery.php';
     }
 
 }

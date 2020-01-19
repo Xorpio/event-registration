@@ -264,7 +264,7 @@ class WP_List_Table {
      * @since 3.1.0
      * @abstract
      */
-    public function prepare_items() {
+    public function prepare_items($data) {
         die( 'function WP_List_Table::prepare_items() must be overridden in a subclass.' );
     }
 
