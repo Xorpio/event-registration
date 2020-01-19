@@ -2,6 +2,9 @@
 namespace EventRegistration;
 
 use EventRegistration\Event\Queries\ListEventQuery;
+use EventRegistration\Event\Commands\CreateEventCommand;
+use EventRegistration\Event\Commands\CreateEventResult;
+use EventRegistration\Event\EventCommandHandler;
 
 if (! defined('WPINC')) {
     die;
@@ -25,6 +28,8 @@ class Event_Registration_Admin_Display_Event_List
 
     private static function renderAdd()
     {
+        global $wpdb;
+
         $title = isset($_POST['title']) ? $_POST['title'] : null;
         $slots = isset($_POST['slots']) ? $_POST['slots'] : null;
         $startRegistration = isset($_POST['startRegistration']) ? $_POST['startRegistration'] : null;
@@ -37,9 +42,20 @@ class Event_Registration_Admin_Display_Event_List
         $errors = [];
         if($_POST) {
             //create command
+            $cmd = (new CreateEventCommand())
+                ->SetSlots($slots)
+            ;
+            $eventHandler = new EventCommandHandler($wpdb);
 
             // execute command
-            //success?
+            $res = $eventHandler->HandeCreateEvent($cmd);
+
+            if ($res->GetSucess()) {
+                echo "opgeslagen";
+                die;
+            }
+
+            $errors = $res->GetErrors();
         }
 
         // if ($_POST){
@@ -69,7 +85,7 @@ class Event_Registration_Admin_Display_Event_List
             <?php if (count($errors) > 0) { ?>
                 <div id="setting-error-invalid_siteurl" class="notice notice-error settings-error is-dismissible">
                     <?php foreach ($errors as $error) { ?>
-                        <p><strong><?php echo $error; ?></strong></p>
+                        <p><strong><?php echo $error[0]; ?></strong></p>
                     <?php } ?>
                     <button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button>
                 </div>
