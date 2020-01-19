@@ -148,7 +148,9 @@ class Event_Registration_Admin_Display_Event_List
 
     private static function renderList()
     {
-        $eventData = (new ListEventQuery())->GetEventList();
+        global $wpdb;
+
+        $eventData = (new ListEventQuery($wpdb))->GetEventList();
 
         //Create an instance of our package class...
         $testListTable = new EventTable();
@@ -169,7 +171,7 @@ class Event_Registration_Admin_Display_Event_List
                 <?php $testListTable->display() ?>
             </form>
 
-        </div>kk
+        </div>
         <?php
     }
 }

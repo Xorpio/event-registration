@@ -1,6 +1,8 @@
 <?php
 namespace EventRegistration {
 
+require __DIR__ . '/vendor/autoload.php';
+
 use EventRegistration\Event_Registration_Activator;
 use EventRegistration\Event_Registration_Deactivator ;
 use EventRegistration\Event_Registration;
@@ -50,7 +52,6 @@ use EventRegistration\Event_Registration;
      * This action is documented in includes/class-event-registration-activator.php
      */
     function activate_event_registration() {
-        require_once plugin_dir_path( __FILE__ ) . 'includes/class-event-registration-activator.php';
         Event_Registration_Activator::activate();
     }
 
@@ -59,7 +60,6 @@ use EventRegistration\Event_Registration;
      * This action is documented in includes/class-event-registration-deactivator.php
      */
     function deactivate_event_registration() {
-        require_once plugin_dir_path( __FILE__ ) . 'includes/class-event-registration-deactivator.php';
         Event_Registration_Deactivator::deactivate();
     }
 

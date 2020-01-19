@@ -54,10 +54,6 @@ class Event_Registration_Admin {
 
 		$this->event_registration = $event_registration;
 		$this->version = $version;
-
-        require_once plugin_dir_path( __FILE__ ) . 'Models/class-list-table.php';
-        require_once plugin_dir_path( __FILE__ ) . 'Models/EventTable.php';
-        require_once plugin_dir_path( __FILE__ ) . 'partials/event-registration-admin-display.php';
 	}
 
 	/**

@@ -7,16 +7,20 @@ if (! defined('WPINC')) {
 
 class ListEventQuery
 {
+    private $wpdb;
+
+    public function __construct (\wpdb $wpdb = null)
+    {
+        $this->wpdb = $wpdb;
+    }
+
     public function GetEventList() : array
     {
-        // @var \wpdb $wpdb
-        global $wpdb;
-
-        $results = $wpdb->get_results("
+        $results = $this->wpdb->get_results("
             SELECT
                 id,
                 title
-            FROM {$wpdb->prefix}er_events
+            FROM {$this->wpdb->prefix}er_events
             WHERE archived = 0
         ;", ARRAY_A);
 
