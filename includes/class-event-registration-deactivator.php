@@ -1,5 +1,8 @@
 <?php
+namespace EventRegistration;
+
 if ( ! defined( 'WPINC' ) ) { die; }
+
 
 /**
  * Fired during plugin deactivation
@@ -31,7 +34,16 @@ class Event_Registration_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
+        self::deleteTable();
+    }
 
-	}
+    private static function deleteTable() {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . 'er_events';
+        $wpdb->query( "DROP TABLE IF EXISTS {$table_name}" );
+
+        delete_option("event_reg_db_version");
+    }
 
 }

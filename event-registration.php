@@ -1,5 +1,9 @@
 <?php
+
+namespace EventRegistration;
+
 if ( ! defined( 'WPINC' ) ) { die; }
+
 
 /**
  * The plugin bootstrap file

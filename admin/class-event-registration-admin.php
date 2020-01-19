@@ -1,4 +1,6 @@
 <?php
+namespace EventRegistration;
+
 if ( ! defined( 'WPINC' ) ) { die; }
 
 /**
@@ -53,6 +55,8 @@ class Event_Registration_Admin {
 		$this->event_registration = $event_registration;
 		$this->version = $version;
 
+        require_once plugin_dir_path( __FILE__ ) . 'Models/class-list-table.php';
+        require_once plugin_dir_path( __FILE__ ) . 'partials/event-registration-admin-display.php';
 	}
 
 	/**
@@ -97,7 +101,7 @@ class Event_Registration_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->event_registration, plugin_dir_url( __FILE__ ) . 'js/event-registration-admin.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( $this->event_registration, plugin_dir_url( __FILE__ ) . 'js/event-registration-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
 
@@ -120,7 +124,7 @@ class Event_Registration_Admin {
 			'events',
 			'read',
 			'event',
-			[__CLASS__, 'render']
+			['EventRegistration\Event_Registration_Admin_Display_Event_List' , 'render']
 		);
 
 	}

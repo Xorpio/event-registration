@@ -1,4 +1,6 @@
 <?php
+namespace EventRegistration;
+
 if ( ! defined( 'WPINC' ) ) { die; }
 
 /**
@@ -23,15 +25,34 @@ if ( ! defined( 'WPINC' ) ) { die; }
  */
 class Event_Registration_Activator {
 
-	/**
-	 * Short Description. (use period)
-	 *
-	 * Long Description.
-	 *
-	 * @since    1.0.0
-	 */
-	public static function activate() {
+    /**
+     * Short Description. (use period)
+     *
+     * Long Description.
+     *
+     * @since    1.0.0
+     */
+    public static function activate() {
+        self::tableCreate();
+    }
 
-	}
+    private static function tableCreate() {
+        global $wpdb;
+
+        $table_name = $wpdb->prefix . 'er_events';
+
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $sql = "CREATE TABLE $table_name (
+            id int NOT NULL AUTO_INCREMENT,
+            title varchar(50) NOT NULL,
+            PRIMARY KEY (id)
+        ) $charset_collate;";
+
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+        dbDelta( $sql );
+
+        add_option( 'event_reg_db_version', EVENT_REGISTRATION_VERSION );
+    }
 
 }
