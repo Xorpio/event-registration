@@ -43,7 +43,14 @@ class Event_Registration_Admin_Display_Event_List
         if($_POST) {
             //create command
             $cmd = (new CreateEventCommand())
+                ->SetTitle($title)
                 ->SetSlots($slots)
+                ->SetStartRegistrationDate(\DateTime::createFromFormat("Y-m-d", $startRegistration))
+                ->SetEndRegistrationDate(\DateTime::createFromFormat("Y-m-d", $endRegistration))
+                ->SetEventDate(\DateTime::createFromFormat("Y-m-d", $eventDate))
+                ->SetEventType($eventType)
+                ->SetPrice(floatval(str_replace(',', '.', $price)))
+                ->SetTax(intval($tax));
             ;
             $eventHandler = new EventCommandHandler($wpdb);
 
@@ -57,27 +64,6 @@ class Event_Registration_Admin_Display_Event_List
 
             $errors = $res->GetErrors();
         }
-
-        // if ($_POST){
-        //     //validate input
-        //     if (empty($_POST['title'])) {
-        //         $errors['title'] = 'Title moet ingevuld zijn';
-        //     }
-        //     if (strlen($_POST['title']) > 50) {
-        //         $errors['title'] = 'Title mag niet langer als 50 zijn';
-        //     }
-
-        //     //store data
-        //     if (count($errors) == 0) {
-
-        //         global $wpdb;
-        //         $table_name = $wpdb->prefix . 'er_events';
-        //         $wpdb->insert($table_name, ['title' => $title], ['%s']);
-
-        //         echo 'Opgeslagen';
-        //         die;
-        //     }
-        // }
 
         ?>
         <div class="wrap">

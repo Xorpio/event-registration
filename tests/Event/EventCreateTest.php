@@ -208,4 +208,352 @@ final class EventCreateTest extends TestCase
         $this->assertIsArray($cmdResult->GetErrors());
         $this->assertEquals("Titel mag niet meer dan 50 karakters lang zijn",$cmdResult->GetErrors()['title'][0]);
     }
+
+    public function testSlotsMustBeSet()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetEndRegistrationDate(new \DateTime())
+            ->SetEventDate(new \DateTime())
+            ->SetEventType("run")
+            ->SetPrice(0)
+            ->SetTax(0)
+            ->SetTitle('test')
+            ->SetStartRegistrationDate(new \DateTime())
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("Plaatsen is verplicht",$cmdResult->GetErrors()['slots'][0]);
+    }
+
+    public function testSlotsMin1()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetEndRegistrationDate(new \DateTime())
+            ->SetEventDate(new \DateTime())
+            ->SetEventType("run")
+            ->SetPrice(0)
+            ->SetTax(0)
+            ->SetTitle('test')
+            ->SetStartRegistrationDate(new \DateTime())
+            ->SetSlots(0)
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("Plaatsen moet minstens 1 zijn",$cmdResult->GetErrors()['slots'][0]);
+    }
+
+    public function testTitleSuccess()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetTitle('test')
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertArrayNotHasKey('title', $cmdResult->GetErrors());
+    }
+
+    public function testSlotsSuccess()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetSlots(5)
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertArrayNotHasKey('slots', $cmdResult->GetErrors());
+    }
+
+    public function testStartRegistrationRequired()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("Start inschrijving is verplicht",$cmdResult->GetErrors()['startRegistrationDate'][0]);
+    }
+
+    public function testStartRegistrationDateBeforeEventDate()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetEventDate(new DateTime())
+            ->SetStartRegistrationDate((new DateTime())->modify('+1 day'))
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("Start inschrijving moet voor het evenement datum liggen",$cmdResult->GetErrors()['startRegistrationDate'][0]);
+    }
+
+    public function testEndRegistrationDateMustBeAfterStartRegistrationDate()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetEndRegistrationDate(new DateTime())
+            ->SetStartRegistrationDate((new DateTime())->modify('+1 day'))
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("Einde inschrijving moet na de start inschrijving datum liggen",$cmdResult->GetErrors()['endRegistrationDate'][0]);
+    }
+
+    public function testEventDateRequired()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("Event datum is verplicht",$cmdResult->GetErrors()['eventDate'][0]);
+    }
+
+    public function testEventTypeRequired()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("Event type is verplicht",$cmdResult->GetErrors()['eventType'][0]);
+    }
+
+    public function testEventTypeInList()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetEventType('fred');
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        // act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        // assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("Event type bevat een ongeldige waarde",$cmdResult->GetErrors()['eventType'][0]);
+    }
+
+    public function testPriceRequired()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("Prijs is verplicht",$cmdResult->GetErrors()['price'][0]);
+    }
+
+    public function testTaxRequired()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("BTW is verplicht",$cmdResult->GetErrors()['tax'][0]);
+    }
+
+    public function testPriceBiggerThen0()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetPrice(-0.01)
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("Prijs moet minstens 0 zijn",$cmdResult->GetErrors()['price'][0]);
+    }
+
+    public function testPriceAtleast0()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetPrice(0)
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertArrayNotHasKey('price', $cmdResult->GetErrors());
+    }
+
+    public function testTaxBiggerThen0()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetTax(-1)
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("BTW moet minstens 0 zijn",$cmdResult->GetErrors()['tax'][0]);
+    }
+
+    public function testTaxAtleast0()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetTax(0)
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertArrayNotHasKey('tax', $cmdResult->GetErrors());
+    }
+
+    public function testTaxMax100()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetTax(101)
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("BTW mag niet meer zijn dan 100",$cmdResult->GetErrors()['tax'][0]);
+    }
+
+    public function testTitleMustBeUnique()
+    {
+        //arrange
+        $cmd = new CreateEventCommand();
+        $cmd->SetTitle('Roparun')
+        ;
+
+        $wpdb = $this->createStub(\wpdb::class);
+        $wpdb->method('get_var')
+            ->willReturn('1');
+        $cmdHandler = new EventCommandHandler($wpdb);
+
+        //act
+        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
+
+        //assert
+        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
+        $this->assertIsArray($cmdResult->GetErrors());
+        $this->assertEquals("Titel moet een unieke waarde zijn",$cmdResult->GetErrors()['title'][0]);
+    }
 }
