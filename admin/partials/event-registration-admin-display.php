@@ -58,8 +58,13 @@ class Event_Registration_Admin_Display_Event_List
             $res = $eventHandler->HandeCreateEvent($cmd);
 
             if ($res->GetSucess()) {
-                echo "opgeslagen";
-                die;
+                ?>
+                <div class="wrap">
+                    <h1>Events</h1>
+                    Event is opgeslagen.
+                </div>
+                <?php
+                return;
             }
 
             $errors = $res->GetErrors();

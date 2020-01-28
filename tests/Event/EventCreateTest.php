@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-define('WPINC', '');
+if (!defined('WPINC')) define('WPINC', '');
 
 use PHPUnit\Framework\TestCase;
 use EventRegistration\Event\Commands\CreateEventCommand;
@@ -296,23 +296,6 @@ final class EventCreateTest extends TestCase
         $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
         $this->assertIsArray($cmdResult->GetErrors());
         $this->assertArrayNotHasKey('slots', $cmdResult->GetErrors());
-    }
-
-    public function testStartRegistrationRequired()
-    {
-        //arrange
-        $cmd = new CreateEventCommand();
-
-        $wpdb = $this->createStub(\wpdb::class);
-        $cmdHandler = new EventCommandHandler($wpdb);
-
-        //act
-        $cmdResult = $cmdHandler->HandeCreateEvent($cmd);
-
-        //assert
-        $this->assertInstanceOf(CreateEventResult::class, $cmdResult);
-        $this->assertIsArray($cmdResult->GetErrors());
-        $this->assertEquals("Start inschrijving is verplicht",$cmdResult->GetErrors()['startRegistrationDate'][0]);
     }
 
     public function testStartRegistrationDateBeforeEventDate()

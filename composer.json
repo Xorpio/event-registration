@@ -1,7 +1,6 @@
 {
     "autoload": {
         "classmap": [
-            "Event/",
             "includes/",
             "public/",
             "admin/",

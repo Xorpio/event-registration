@@ -1,6 +1,10 @@
 <?php
 
+
 namespace EventRegistration;
+
+use EventRegistration\partials\PublicDisplay;
+
 
 if ( ! defined( 'WPINC' ) ) { die; }
 
@@ -27,82 +31,140 @@ if ( ! defined( 'WPINC' ) ) { die; }
  */
 class Event_Registration_Public {
 
-	/**
-	 * The ID of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $event_registration    The ID of this plugin.
-	 */
-	private $event_registration;
+    /**
+     * The ID of this plugin.
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      string    $event_registration    The ID of this plugin.
+     */
+    private $event_registration;
 
-	/**
-	 * The version of this plugin.
-	 *
-	 * @since    1.0.0
-	 * @access   private
-	 * @var      string    $version    The current version of this plugin.
-	 */
-	private $version;
+    /**
+     * The version of this plugin.
+     *
+     * @since    1.0.0
+     * @access   private
+     * @var      string    $version    The current version of this plugin.
+     */
+    private $version;
 
-	/**
-	 * Initialize the class and set its properties.
-	 *
-	 * @since    1.0.0
-	 * @param      string    $event_registration       The name of the plugin.
-	 * @param      string    $version    The version of this plugin.
-	 */
-	public function __construct( $event_registration, $version ) {
+    /**
+     * Initialize the class and set its properties.
+     *
+     * @since    1.0.0
+     * @param      string    $event_registration       The name of the plugin.
+     * @param      string    $version    The version of this plugin.
+     */
+    public function __construct( $event_registration, $version ) {
 
-		$this->event_registration = $event_registration;
-		$this->version = $version;
+        $this->event_registration = $event_registration;
+        $this->version = $version;
 
-	}
+    }
 
-	/**
-	 * Register the stylesheets for the public-facing side of the site.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_styles() {
+    /**
+     * Register the stylesheets for the public-facing side of the site.
+     *
+     * @since    1.0.0
+     */
+    public function enqueue_styles() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Event_Registration_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Event_Registration_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+        /**
+         * This function is provided for demonstration purposes only.
+         *
+         * An instance of this class should be passed to the run() function
+         * defined in Event_Registration_Loader as all of the hooks are defined
+         * in that particular class.
+         *
+         * The Event_Registration_Loader will then create the relationship
+         * between the defined hooks and the functions defined in this
+         * class.
+         */
 
-		wp_enqueue_style( $this->event_registration, plugin_dir_url( __FILE__ ) . 'css/event-registration-public.css', array(), $this->version, 'all' );
+         wp_register_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' );
+        wp_enqueue_style('bootstrap');
 
-	}
+        wp_enqueue_style( $this->event_registration, plugin_dir_url( __FILE__ ) . 'css/event-registration-public.css', array(), $this->version, 'all' );
+        wp_enqueue_style( $this->event_registration, plugin_dir_url( __FILE__ ) . 'css/event-registration-public.css', array(), $this->version, 'all' );
+    }
 
-	/**
-	 * Register the JavaScript for the public-facing side of the site.
-	 *
-	 * @since    1.0.0
-	 */
-	public function enqueue_scripts() {
+    /**
+     * Register the JavaScript for the public-facing side of the site.
+     *
+     * @since    1.0.0
+     */
+    public function enqueue_scripts() {
 
-		/**
-		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Event_Registration_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Event_Registration_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
-		 */
+        /**
+         * This function is provided for demonstration purposes only.
+         *
+         * An instance of this class should be passed to the run() function
+         * defined in Event_Registration_Loader as all of the hooks are defined
+         * in that particular class.
+         *
+         * The Event_Registration_Loader will then create the relationship
+         * between the defined hooks and the functions defined in this
+         * class.
+         */
 
-		wp_enqueue_script( $this->event_registration, plugin_dir_url( __FILE__ ) . 'js/event-registration-public.js', array( 'jquery' ), $this->version, false );
+        wp_enqueue_script( $this->event_registration, plugin_dir_url( __FILE__ ) . 'js/event-registration-public.js', array( 'jquery' ), $this->version, false );
 
-	}
+    }
+
+    public function register_shortcodes() {
+        add_shortcode('er_signup', [$this, 'display']);
+    }
+
+    public function test_page_template($template)
+    {
+        $controller = new PublicDisplay();
+
+        if (is_page('event')) {
+            $themeTemplate = get_theme_file_path('eventForm.php');
+            if(is_file($themeTemplate)) {
+                return $themeTemplate;
+            }
+
+            $new_template = plugin_dir_path(__FILE__) . 'templates/eventForm.php';
+            if (is_file($new_template)) {
+                return $new_template;
+            }
+        }
+
+        return $template;
+    }
+
+    function add_rewrite_rules( $wp_rewrite )
+    {
+        $new_rules = array
+        (
+            '(event)/(.+?)/([0-9]{1})/?$' =>
+                'index.php?pagename='.$wp_rewrite->preg_index(1).
+                '&eventtitle='.$wp_rewrite->preg_index(2).
+                '&part='.$wp_rewrite->preg_index(3),
+
+            '(event)/(.*?)/?$' =>
+                'index.php?pagename='.$wp_rewrite->preg_index(1).
+                '&eventtitle='.$wp_rewrite->preg_index(2)
+        );
+        // Always add your rules to the top, to make sure your rules have priority
+        $wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
+    }
+
+    function query_vars($public_query_vars)
+    {
+        $public_query_vars[] = "eventtitle";
+        $public_query_vars[] = "part";
+        return $public_query_vars;
+    }
+
+    function flush_rewrite_rules()
+    {
+        global $wp_rewrite;
+
+        $wp_rewrite->flush_rules();
+    }
+
 
 }
