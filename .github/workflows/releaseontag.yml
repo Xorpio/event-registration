@@ -1,0 +1,26 @@
+name: Release on tag
+
+on:
+  push:
+    tags: 
+    - V*
+    
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest --no-dev
+
+    - name: Zip Release
+      uses: TheDoctor0/zip-release@v0.2.1
+      with:
+        # Filename for archive
+        filename: release.zip
+        # Base path for archive files
+        # List of excluded files/directories
+        # exclusions: .github tests
