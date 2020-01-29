@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    tags: V*
+    
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Run a multi-line script
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+    - name: Zip Release
+      uses: TheDoctor0/zip-release@v0.2.1
+      with:
+        # Filename for archive
+        filename: ${GITHUB_REF##*/}.zip
+        # Base path for archive files
+        # List of excluded files/directories
+        exclusions:
+          - .github
+          - tests
