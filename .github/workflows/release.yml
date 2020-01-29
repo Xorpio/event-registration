@@ -24,6 +24,4 @@ jobs:
         filename: ${GITHUB_REF##*/}.zip
         # Base path for archive files
         # List of excluded files/directories
-        exclusions:
-          - .github
-          - tests
+        exclusions: .github tests
