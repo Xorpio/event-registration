@@ -5,7 +5,11 @@
         "classmap": [
             "includes/",
             "public/",
-            "admin/",
+            "admin/"
+        ]
+    },
+    "autoload-dev": {
+        "classmap": [
             "../../../wp-includes/"
         ]
     },
