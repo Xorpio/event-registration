@@ -1,4 +1,6 @@
 {
+    "name": "xorpio/team77-event-registration",
+    "description": "Event registration plugin",
     "autoload": {
         "classmap": [
             "includes/",
