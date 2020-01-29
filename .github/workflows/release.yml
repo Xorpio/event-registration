@@ -12,12 +12,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Run a one-line script
-      run: echo Hello, world!
-    - name: Run a multi-line script
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+    
+    - name: Install dependencies
+      run: composer install --prefer-dist --no-progress --no-suggest --no-dev
+    
     - name: Zip Release
       uses: TheDoctor0/zip-release@v0.2.1
       with:
