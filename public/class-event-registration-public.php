@@ -82,7 +82,7 @@ class Event_Registration_Public {
          * class.
          */
 
-         wp_register_style( 'bootstrap', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' );
+         wp_register_style( 'bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' );
         wp_enqueue_style('bootstrap');
 
         wp_enqueue_style( $this->event_registration, plugin_dir_url( __FILE__ ) . 'css/event-registration-public.css', array(), $this->version, 'all' );

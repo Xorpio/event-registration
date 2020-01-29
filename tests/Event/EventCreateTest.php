@@ -539,4 +539,5 @@ final class EventCreateTest extends TestCase
         $this->assertIsArray($cmdResult->GetErrors());
         $this->assertEquals("Titel moet een unieke waarde zijn",$cmdResult->GetErrors()['title'][0]);
     }
+
 }

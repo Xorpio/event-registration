@@ -68,6 +68,7 @@ class EventCommandHandler
         $table = $this->wpdb->prefix.'er_events';
         $data = [
             'title' => $cmd->GetTitle(),
+            'slug' => sanitize_title($cmd->GetTitle()),
             'slots' => $cmd->GetSlots(),
             'startRegistrationDate' => $cmd->GetStartRegistrationDate()->format('Y-m-d'),
             'endRegistrationDate' => $cmd->GetEndRegistrationDate()->format('Y-m-d'),
@@ -77,6 +78,7 @@ class EventCommandHandler
             'tax' => $cmd->GetTax()
         ];
         $format = [
+            '%s',
             '%s',
             '%d',
             '%s',

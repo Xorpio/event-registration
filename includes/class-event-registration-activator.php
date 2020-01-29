@@ -46,6 +46,7 @@ class Event_Registration_Activator {
 
         $sql = "CREATE TABLE {$wpdb->prefix}er_events (
             `title` varchar(50) NOT NULL,
+            `slug` varchar(50) NOT NULL,
             `slots` int(11) NOT NULL,
             `startRegistrationDate` date NOT NULL,
             `endRegistrationDate` date DEFAULT NULL,
@@ -83,12 +84,9 @@ class Event_Registration_Activator {
 
         $sql = "CREATE TABLE {$wpdb->prefix}er_runner (
             `id` int(11) NOT NULL AUTO_INCREMENT,
-            `initials` varchar(10) NOT NULL,
-            `lastName` varchar(100) NOT NULL,
-            `surName` varchar(20) DEFAULT NULL,
             `documentNr` varchar(45) NOT NULL,
-            `email` varchar(255) DEFAULT NULL,
             `registrationId` int(11) NOT NULL,
+            `phonenumber` varchar(20) NOT NULL,
             PRIMARY KEY  (`id`)
         ) $charset_collate;";
         dbDelta( $sql );
@@ -97,6 +95,7 @@ class Event_Registration_Activator {
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `name` varchar(45) NOT NULL,
             `registrationId` int(11) NOT NULL,
+            `phonenumber` varchar(20) NOT NULL,
             PRIMARY KEY  (`id`)
         ) $charset_collate;";
         dbDelta( $sql );
