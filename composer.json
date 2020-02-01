@@ -18,6 +18,7 @@
         "fzaninotto/faker": "^1.9"
     },
     "require": {
-        "vlucas/valitron": "^1.4"
+        "vlucas/valitron": "^1.4",
+        "mollie/mollie-api-php": "2.0"
     }
 }
