@@ -116,19 +116,32 @@ class Event_Registration_Public {
         add_shortcode('er_signup', [$this, 'display']);
     }
 
-    public function test_page_template($template)
+    public function event_page_template($template)
     {
         $controller = new PublicDisplay();
 
         if (is_page('event')) {
-            $themeTemplate = get_theme_file_path('eventForm.php');
-            if(is_file($themeTemplate)) {
-                return $themeTemplate;
-            }
 
-            $new_template = plugin_dir_path(__FILE__) . 'templates/eventForm.php';
-            if (is_file($new_template)) {
-                return $new_template;
+            if (get_query_var('payment') != '') {
+                $themeTemplate = get_theme_file_path('paymentDone.php');
+                if(is_file($themeTemplate)) {
+                    return $themeTemplate;
+                }
+
+                $new_template = plugin_dir_path(__FILE__) . 'templates/paymentDone.php';
+                if (is_file($new_template)) {
+                    return $new_template;
+                }
+            } else {
+                $themeTemplate = get_theme_file_path('eventForm.php');
+                if(is_file($themeTemplate)) {
+                    return $themeTemplate;
+                }
+
+                $new_template = plugin_dir_path(__FILE__) . 'templates/eventForm.php';
+                if (is_file($new_template)) {
+                    return $new_template;
+                }
             }
         }
 
@@ -139,14 +152,13 @@ class Event_Registration_Public {
     {
         $new_rules = array
         (
-            '(event)/(.+?)/([0-9]{1})/?$' =>
-                'index.php?pagename='.$wp_rewrite->preg_index(1).
-                '&eventtitle='.$wp_rewrite->preg_index(2).
-                '&part='.$wp_rewrite->preg_index(3),
+            '(payment)/success/([0-9]+)/?$' =>
+                'index.php?pagename=event'.
+                '&payment='.$wp_rewrite->preg_index(2),
 
             '(event)/(.*?)/?$' =>
                 'index.php?pagename='.$wp_rewrite->preg_index(1).
-                '&eventtitle='.$wp_rewrite->preg_index(2)
+                '&eventtitle='.$wp_rewrite->preg_index(2),
         );
         // Always add your rules to the top, to make sure your rules have priority
         $wp_rewrite->rules = $new_rules + $wp_rewrite->rules;
@@ -155,7 +167,7 @@ class Event_Registration_Public {
     function query_vars($public_query_vars)
     {
         $public_query_vars[] = "eventtitle";
-        $public_query_vars[] = "part";
+        $public_query_vars[] = "payment";
         return $public_query_vars;
     }
 

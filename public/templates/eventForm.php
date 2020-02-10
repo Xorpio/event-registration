@@ -2,6 +2,7 @@
 
 use EventRegistration\Registration\Commands\CreateRegistrationCommand;
 use EventRegistration\Registration\Commands\EventNotFoundResult;
+use EventRegistration\Registration\Commands\CreateRegistrationEventResultSucces;
 use EventRegistration\Registration\RegistrationCommandHandler;
 
 $cmd = new CreateRegistrationCommand(get_query_var('eventtitle'));
@@ -26,6 +27,8 @@ get_header(); ?>
 
                         <?php if ($response instanceof EventNotFoundResult) { ?>
                             <div>Event is niet gevonden</div>
+                        <?php } else if ($response instanceof CreateRegistrationEventResultSucces) { ?>
+                            <a href="<?php echo $response->GetPaymentUrl(); ?>">Naar ideal</a>
                         <?php } else { ?>
 
 
@@ -41,49 +44,84 @@ get_header(); ?>
 
                             <form action="/event/<?php echo get_query_var('eventtitle') ?>" method="post"">
                                 <div class="form-row">
-                                    <label for="initials">Initialen <small>*</small></label>
+                                    <label for="firstName">Voornaam <small>*</small></label>
                                     <input
                                         type="text"
-                                        class="form-control <?php echo $response->GetClass('initials'); ?>"
-                                        name="initials"
+                                        class="form-control <?php echo $response->GetClass('firstName'); ?>"
+                                        name="firstName"
                                         required
-                                        value="<?php echo $response->GetValue('initials'); ?>"
-                                        id="initials" />
-                                        <?php if ($response->GetClass('initials') == 'is-invalid') { ?>
+                                        value="<?php echo $response->GetValue('firstName'); ?>"
+                                        id="firstName" />
+                                        <?php if ($response->GetClass('firstName') == 'is-invalid') { ?>
                                             <div class="invalid-feedback">
-                                                <?php echo $response->GetErrors()['initials'][0]; ?>
+                                                <?php echo $response->GetErrors()['firstName'][0]; ?>
                                             </div>
                                         <?php } ?>
                                 </div>
+
                                 <div class="form-row">
-                                    <label for="surname">Tussenvoegsel</label>
+                                    <label for="surName">Tussenvoegsel</label>
                                     <input
                                         type="text"
-                                        class="form-control <?php echo $response->GetClass('surname'); ?>"
-                                        name="surname"
-                                        value="<?php echo $response->GetValue('surname'); ?>"
-                                        id="surname" />
-                                        <?php if ($response->GetClass('surname') == 'is-invalid') { ?>
+                                        class="form-control <?php echo $response->GetClass('surName'); ?>"
+                                        name="surName"
+                                        value="<?php echo $response->GetValue('surName'); ?>"
+                                        id="surName" />
+                                        <?php if ($response->GetClass('surName') == 'is-invalid') { ?>
                                             <div class="invalid-feedback">
-                                                <?php echo $response->GetErrors()['surname'][0]; ?>
+                                                <?php echo $response->GetErrors()['surName'][0]; ?>
                                             </div>
                                         <?php } ?>
                                 </div>
+
                                 <div class="form-row">
-                                    <label for="lastname">Achternaam <small>*</small></label>
+                                    <label for="lastName">Achternaam <small>*</small></label>
                                     <input
                                         type="text"
                                         required
-                                        class="form-control <?php echo $response->GetClass('lastname'); ?>"
-                                        name="lastname"
-                                        value="<?php echo $response->GetValue('lastname'); ?>"
-                                        id="lastname" />
-                                        <?php if ($response->GetClass('lastname') == 'is-invalid') { ?>
+                                        class="form-control <?php echo $response->GetClass('lastName'); ?>"
+                                        name="lastName"
+                                        value="<?php echo $response->GetValue('lastName'); ?>"
+                                        id="lastName" />
+                                        <?php if ($response->GetClass('lastName') == 'is-invalid') { ?>
                                             <div class="invalid-feedback">
-                                                <?php echo $response->GetErrors()['lastname'][0]; ?>
+                                                <?php echo $response->GetErrors()['lastName'][0]; ?>
                                             </div>
                                         <?php } ?>
                                 </div>
+
+                                <div class="form-row">
+                                    <label for="birthdate">Geboortedatum <small>*</small></label>
+                                    <input
+                                        type="date"
+                                        required
+                                        class="form-control <?php echo $response->GetClass('birthdate'); ?>"
+                                        name="birthdate"
+                                        value="<?php echo $response->GetValue('birthdate'); ?>"
+                                        id="birthdate" />
+                                        <?php if ($response->GetClass('birthdate') == 'is-invalid') { ?>
+                                            <div class="invalid-feedback">
+                                                <?php echo $response->GetErrors()['birthdate'][0]; ?>
+                                            </div>
+                                        <?php } ?>
+                                </div>
+
+                                <div class="form-row">
+                                    <label for="cityOfBirth">Geboorte stad <small>*</small></label>
+                                    <input
+                                        type="text"
+                                        required
+                                        class="form-control <?php echo $response->GetClass('cityOfBirth'); ?>"
+                                        name="cityOfBirth"
+                                        value="<?php echo $response->GetValue('cityOfBirth'); ?>"
+                                        id="cityOfBirth" />
+                                        <?php if ($response->GetClass('cityOfBirth') == 'is-invalid') { ?>
+                                            <div class="invalid-feedback">
+                                                <?php echo $response->GetErrors()['cityOfBirth'][0]; ?>
+                                            </div>
+                                        <?php } ?>
+                                </div>
+
                                 <div class="form-row">
                                     <label for="email">Email address <small>*</small></label>
                                     <input
@@ -99,11 +137,11 @@ get_header(); ?>
                                             </div>
                                         <?php } ?>
                                 </div>
+
                                 <div class="form-row">
                                     <label for="phone">Telefoon</label>
                                     <input
-                                        type="text"
-                                        required
+                                        type="tel"
                                         class="form-control <?php echo $response->GetClass('phone'); ?>"
                                         name="phone"
                                         value="<?php echo $response->GetValue('phone'); ?>"
@@ -114,6 +152,7 @@ get_header(); ?>
                                             </div>
                                         <?php } ?>
                                 </div>
+
                                 <div class="form-row">
                                     <label for="docNr">Document nr <small>*</small></label>
                                     <input
@@ -131,6 +170,52 @@ get_header(); ?>
                                         <?php } ?>
                                     <small id="docNrHelp">Document nr is noodzakelijk voor toegang tot de basis</small>
                                 </div>
+
+                                <div class="form-row">
+                                    <label for="idType">Type identificatie <small>*</small></label>
+                                    <select class="form-control form-control-lg" name="idType" required id="idType">
+                                            <option value="">
+                                            </option>
+                                            <option value="id"
+                                                <?php echo $response->GetValue('idType') == 'id' ? 'selected="selected"':''; ?>>
+                                                Id kaart
+                                            </option>
+                                            <option value="passport"
+                                                <?php echo $response->GetValue('idType') == 'passport' ? 'selected="selected"':''; ?>>
+                                                Paspoort
+                                            </option>
+                                            <option value="driver"
+                                                <?php echo $response->GetValue('idType') == 'driver' ? 'selected="selected"':''; ?>>
+                                                Rijbewijs
+                                            </option>
+                                    </select>
+                                    <?php if ($response->GetClass('idType') == 'is-invalid') { ?>
+                                        <div class="invalid-feedback">
+                                            <?php echo $response->GetErrors()['idType'][0]; ?>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+
+
+                                <div class="form-row">
+                                    <label for="registrationType">Soort registratie <small>*</small></label>
+                                    <select class="form-control form-control-lg" name="registrationType" id="registrationType">
+                                            <option value="runner"
+                                                <?php echo $response->GetValue('registrationType') == 'runner' ? 'selected="selected"':''; ?>>
+                                                Hardloper
+                                            </option>
+                                            <option value="spectator"
+                                                <?php echo $response->GetValue('registrationType') == 'spectator' ? 'selected="selected"':''; ?>>
+                                                Toeschouwer
+                                            </option>
+                                    </select>
+                                    <?php if ($response->GetClass('registrationType') == 'is-invalid') { ?>
+                                        <div class="invalid-feedback">
+                                            <?php echo $response->GetErrors()['registrationType'][0]; ?>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+
                                 <div class="form-row form-check">
                                     <input
                                         type="checkbox"

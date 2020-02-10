@@ -15,8 +15,8 @@ class EventTable extends WP_List_Table
 
         //Set parent defaults
         parent::__construct(array(
-            'singular'  => 'movie',     //singular name of the listed records
-            'plural'    => 'movies',    //plural name of the listed records
+            'singular'  => 'event',     //singular name of the listed records
+            'plural'    => 'events',    //plural name of the listed records
             'ajax'      => false        //does this table support ajax?
         ));
     }
@@ -45,7 +45,8 @@ class EventTable extends WP_List_Table
      **************************************************************************/
     public function column_default($item, $column_name)
     {
-        return print_r($item, true); //Show the whole array for troubleshooting purposes
+        return $item[$column_name];
+        // return print_r($item, true); //Show the whole array for troubleshooting purposes
     }
 
 
@@ -70,8 +71,8 @@ class EventTable extends WP_List_Table
 
         //Build row actions
         $actions = array(
-            'edit'      => sprintf('<a href="?page=%s&action=%s&movie=%s">Edit</a>', $_REQUEST['page'], 'edit', $item['id']),
-            'delete'    => sprintf('<a href="?page=%s&action=%s&movie=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['id']),
+            'edit'      => sprintf('<a href="?page=%s&action=%s&event=%s">Edit</a>', $_REQUEST['page'], 'edit', $item['id']),
+            'delete'    => sprintf('<a href="?page=%s&action=%s&event=%s">Delete</a>', $_REQUEST['page'], 'delete', $item['id']),
         );
 
         //Return the title contents
@@ -124,12 +125,12 @@ class EventTable extends WP_List_Table
     {
         $columns = array(
             'title' => 'Naam',
+            'slug' => 'Url',
             'slots' => 'Plaatsen',
-            'startRegistration' => 'Start inschrijving',
-            'endRegistration' => 'Sluiting inschrijving',
+            'startRegistrationDate' => 'Start inschrijving',
             'eventDate' => 'Datum event',
             'price' => 'Prijs',
-            'tax' => 'BTW'
+            'eventType'=> 'Event type',
         );
         return $columns;
     }

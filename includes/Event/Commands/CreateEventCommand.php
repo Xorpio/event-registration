@@ -82,6 +82,17 @@ class CreateEventCommand
         return $this;
     }
 
+    private $spectatorPrice;
+    public function GetSpectatorPrice(): float
+    {
+        return $this->spectatorPrice;
+    }
+    public function SetSpectatorPrice(float $spectatorPrice): self
+    {
+        $this->spectatorPrice = $spectatorPrice;
+        return $this;
+    }
+
     private $tax;
     public function GetTax(): int
     {
@@ -100,6 +111,7 @@ class CreateEventCommand
             'eventDate' => $this->eventDate,
             'eventType' => $this->eventType,
             'price' => $this->price,
+            'spectatorPrice' => $this->spectatorPrice,
             'tax' => $this->tax,
             'slots' => $this->slots,
             'startRegistrationDate' => $this->startRegistrationDate,

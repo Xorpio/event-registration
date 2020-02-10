@@ -19,7 +19,13 @@ class ListEventQuery
         $results = $this->wpdb->get_results("
             SELECT
                 id,
-                title
+                title,
+                slug,
+                startRegistrationDate,
+                eventDate,
+                price,
+                slots,
+                eventType
             FROM {$this->wpdb->prefix}er_events
             WHERE archived = 0
         ;", ARRAY_A);

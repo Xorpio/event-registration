@@ -56,6 +56,9 @@ class EventCommandHandler
             ->rule('required', 'price')->label('Prijs')
             ->rule('min', 'price', 0)->label('Prijs')
 
+            ->rule('required', 'spectatorPrice')->label('Toeschouwer prijs')
+            ->rule('min', 'spectatorPrice', 0)->label('Toeschouwer prijs')
+
             ->rule('required', 'tax')->label('BTW')
             ->rule('min', 'tax', 0)->label('BTW')
             ->rule('max', 'tax', 100)->label('BTW')
@@ -75,6 +78,7 @@ class EventCommandHandler
             'eventDate' => $cmd->GetEventDate()->format('Y-m-d'),
             'eventType' => $cmd->GetEventType(),
             'price' => $cmd->GetPrice(),
+            'spectatorPrice' => $cmd->GetSpectatorPrice(),
             'tax' => $cmd->GetTax()
         ];
         $format = [
@@ -85,6 +89,7 @@ class EventCommandHandler
             '%s',
             '%s',
             '%s',
+            '%f',
             '%f',
             '%d'
         ];

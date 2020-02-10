@@ -37,6 +37,7 @@ class Event_Registration_Admin_Display_Event_List
         $eventDate = isset($_POST['eventDate']) ? $_POST['eventDate'] : null;
         $eventType = isset($_POST['eventType']) ? $_POST['eventType'] : null;
         $price = isset($_POST['price']) ? $_POST['price'] : null;
+        $spectatorPrice = isset($_POST['spectatorPrice']) ? $_POST['spectatorPrice'] : null;
         $tax = isset($_POST['tax']) ? $_POST['tax'] : null;
 
         $errors = [];
@@ -50,6 +51,7 @@ class Event_Registration_Admin_Display_Event_List
                 ->SetEventDate(\DateTime::createFromFormat("Y-m-d", $eventDate))
                 ->SetEventType($eventType)
                 ->SetPrice(floatval(str_replace(',', '.', $price)))
+                ->SetSpectatorPrice(floatval(str_replace(',', '.', $spectatorPrice)))
                 ->SetTax(intval($tax));
             ;
             $eventHandler = new EventCommandHandler($wpdb);
@@ -133,6 +135,19 @@ class Event_Registration_Admin_Display_Event_List
                         ></td>
                     </tr>
                     <tr class="">
+                        <th><label for="spectatorPrice">Toeschouwer prijs(&euro;)</label></th>
+                        <td><input
+                            type="text"
+                            name="spectatorPrice"
+                            id="spectatorPrice"
+                            value="<?php echo $spectatorPrice; ?>"
+                            class="regular-text"
+                            required
+                            pattern="\d+,\d{2}"
+                            title="Bijvoorbeeld: 1,50"
+                        ></td>
+                    </tr>
+                    <tr class="">
                         <th><label for="tax">BTW(%)</label></th>
                         <td><input
                             type="number"
@@ -140,7 +155,7 @@ class Event_Registration_Admin_Display_Event_List
                             id="tax"
                             value="<?php echo $tax; ?>"
                             class="regular-text"
-                            min="1"
+                            min="0"
                             max="50"
                             required
                         ></td>

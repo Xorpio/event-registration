@@ -114,20 +114,22 @@ class Event_Registration_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
-
 		add_menu_page(
-			'eventssw',
-			'events',
+			'Events',
+			'Events',
 			'read',
 			'event',
-			['EventRegistration\Event_Registration_Admin_Display_Event_List' , 'render']
+            ['EventRegistration\Event_Registration_Admin_Display_Event_List' , 'render']
 		);
 
-	}
+        add_submenu_page(
+            'event',
+            'Opties',
+            'Opties',
+            'read',
+            'er_eventOptions',
+            ['EventRegistration\Admin\Partials\DisplayOptions' , 'render']
+        );
 
-	public static function render()
-	{
-		echo 'jaja';
-	}
-
+    }
 }
