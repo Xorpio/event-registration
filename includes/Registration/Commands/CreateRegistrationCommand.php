@@ -78,7 +78,7 @@ class CreateRegistrationCommand
         return $this->post['cityOfBirth'];
     }
 
-    public function GetIdentificationType(): string
+    public function GetIdType(): string
     {
         return $this->post['idType'];
     }

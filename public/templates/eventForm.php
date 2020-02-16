@@ -28,7 +28,90 @@ get_header(); ?>
                         <?php if ($response instanceof EventNotFoundResult) { ?>
                             <div>Event is niet gevonden</div>
                         <?php } else if ($response instanceof CreateRegistrationEventResultSucces) { ?>
-                            <a href="<?php echo $response->GetPaymentUrl(); ?>">Naar ideal</a>
+                            <div class="row">
+                                <a href="<?php echo $response->GetPaymentUrl(); ?>">Naar ideal</a>
+                            </div>
+
+                            <table class="table">
+                                <tr>
+                                    <th>Voornaam</th>
+                                    <td>
+                                        <?php echo $response->GetFirstName(); ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Tussenvoegsel</th>
+                                    <td>
+                                        <?php echo $response->GetSurName(); ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Achternaam</th>
+                                    <td>
+                                        <?php echo $response->GetLastName(); ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Geboortedatum</th>
+                                    <td>
+                                        <?php echo $response->GetBirthDate(); ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Geboortestad</th>
+                                    <td>
+                                        <?php echo $response->GetCityOfBirth(); ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Email addres</th>
+                                    <td>
+                                        <?php echo $response->GetEmail(); ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Telefoon</th>
+                                    <td>
+                                        <?php echo $response->GetPhone(); ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Document nummer</th>
+                                    <td>
+                                        <?php echo $response->GetDocumentNr(); ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Type identificatie</th>
+                                    <td>
+                                        <?php echo $response->GetIdType(); ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Prijs</th>
+                                    <td>
+                                        &euro; <?php echo $response->GetPrice(); ?>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <th>Ingeschreven als</th>
+                                    <td>
+                                        <?php echo $response->GetIsRunner() ? 'Hardloper' : 'Toeschouwer'; ?>
+                                    </td>
+                                </tr>
+
+                            </table>
+
                         <?php } else { ?>
 
 

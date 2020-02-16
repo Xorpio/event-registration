@@ -116,7 +116,7 @@ class RegistrationCommandHandler
                 'documentNr' => $cmd->GetDocumentNr(),
                 'birthDate' => $cmd->GetBirthDate(),
                 'cityOfBirth' => $cmd->GetCityOfBirth(),
-                'identificationType' => $cmd->GetIdentificationType(),
+                'identificationType' => $cmd->GetIdType(),
 
                 'isRunner' => $cmd->GetIsRunner()
             ];
@@ -132,11 +132,15 @@ class RegistrationCommandHandler
             $this->wpdb->insert($table,$data,$format);
             $registrationId = $this->wpdb->insert_id;
 
+            $price = ($cmd->GetIsRunner()) ?
+                $event->price:
+                $event->spectatorPrice;
+
             $paymentTable = $this->wpdb->prefix.'er_payment';
             $data = [
                 'registrationId' => $registrationId,
-                'price' => $cmd->GetDocumentNr(),
-                'tax' => $cmd->GetBirthDate(),
+                'price' => $price,
+                'tax' => $event->tax,
             ];
             $format = [
                 '%d',
@@ -154,9 +158,9 @@ class RegistrationCommandHandler
             $payment = $mollie->payments->create([
                 "amount" => [
                     "currency" => "EUR",
-                    "value" => "10.00"
+                    "value" => $price,
                 ],
-                "description" => "My first API payment",
+                "description" => "Inschrijving voor " . $event->title,
                 "redirectUrl" => $redirectUrl,
                 "webhookUrl"  => $webhook
             ]);
@@ -167,10 +171,8 @@ class RegistrationCommandHandler
                 ['registrationId' => $registrationId]
             );
 
-            return new CreateRegistrationEventResultSucces($payment->getCheckoutUrl());
+            return new CreateRegistrationEventResultSucces($payment->getCheckoutUrl(), $cmd, $event);
         }
-
-        // $res->SetPost([]);
 
         return $res;
     }
