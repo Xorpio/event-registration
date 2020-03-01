@@ -6,6 +6,11 @@ if ( ! defined( 'WPINC' ) ) { die; }
 
 class CreatePaymentCommand
 {
+    public function __construct(string $id)
+    {
+        $this->registrationId = $id;
+    }
+
     private $registrationId;
     public function GetRegistrationId(): string
     {

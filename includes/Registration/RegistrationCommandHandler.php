@@ -153,7 +153,7 @@ class RegistrationCommandHandler
             $mollie->setApiKey(get_option('er_mollieApiKey'));
 
             $webhook = get_site_url() . "/api/payment";
-            $redirectUrl = get_site_url() . "/event/{$event->slug}/success/{$registrationId}";
+            $redirectUrl = get_site_url() . "/payment/success/{$registrationId}";
 
             $payment = $mollie->payments->create([
                 "amount" => [

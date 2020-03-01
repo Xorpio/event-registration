@@ -152,7 +152,7 @@ class Event_Registration_Public {
     {
         $new_rules = array
         (
-            '(payment)/success/([0-9]+)/?$' =>
+            '(payment)/success/(.*?)/?$' =>
                 'index.php?pagename=event'.
                 '&payment='.$wp_rewrite->preg_index(2),
 
