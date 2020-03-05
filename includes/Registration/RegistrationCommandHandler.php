@@ -53,7 +53,6 @@ class RegistrationCommandHandler
                 ->rule('lengthMax', 'email', 255)->label('Email')
                 ->rule('email', 'email')->label('Email')
 
-                ->rule('required', 'phone')->label('Telefoon')
                 ->rule('lengthMax', 'phone', 20)->label('Telefoon')
 
                 ->rule('required', 'docNr')->label('Document nr')
