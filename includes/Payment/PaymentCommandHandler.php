@@ -66,7 +66,19 @@ class PaymentCommandHandler
                                 $cmd->GetRegistrationId()
                         ));
 
-                        wp_mail($registration->email, 'Betaald', 'Je hebt betaald! Jee!');
+                        wp_mail($registration->email, 'Vliegbasisloop inschrijving Team 77 Midden Brabant',
+'Beste deelnemer,
+
+Bedankt voor je inschrijving. We houden je via dit email adres op de hoogte over het evenement
+
+Het geld wat wordt opgehaald met dit evenement gaat richting stichting Roparun dat geld wordt toegekend aan instellingen, goede doelen of projecten die bijdragen aan de missie van Roparun:
+
+"Leven toevoegen aan de dagen, waar vaak geen dagen meer kunnen worden toegevoegd aan het leven”
+
+Het geld dat wordt opgehaald tijdens het evenement Roparun wordt toegekend aan instellingen, goede doelen of projecten die bijdragen aan het motto van Roparun. Je kunt hierbij denken aan de inrichting van een inloophuis, waar (ex-) kankerpatiënten en/of naasten elkaar kunnen ontmoeten. Vakanties voor mensen met kanker en hun familie zodat zij, ook in een akelige periode, een mooie herinnering kunnen creëren. Workshops in ziekenhuizen waarbij mensen met kanker leren omgaan met uiterlijke veranderingen die ze krijgen door de behandelingen. Een fijne dag uit voor zieke kinderen en hun broertjes of zusjes, zodat zij even niet hoeven te denken aan het ziek zijn. De ontwikkeling van ‘palliatieve boxen’, een hulpmiddel voor mensen in een terminale fase die graag in de eigen thuisomgeving willen verblijven. Of de inrichting van een hospice om er voor te zorgen dat mensen tijdens hun laatste levensfase in een prettige omgeving kunnen verblijven.
+
+Met vriendelijke groet,k
+Team 77 Midden Brabant');
                     }
                 }
 

@@ -2,3 +2,48 @@
  * All of the CSS for your public-facing functionality should be
  * included in this file.
  */
+
+ #eventRegistration {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    justify-items: stretch;
+    column-gap: 10px;
+ }
+
+ .er-form-row-first {
+    grid-column: span 2;
+ }
+
+
+ .er-form-row {
+    grid-column: span 3;
+ }
+
+@media (max-width: 550px) {
+ .er-form-row-first, .er-form-row{
+    grid-column: span 1;
+ }
+
+ #eventRegistration {
+     grid-template-columns: auto;
+ }
+}
+
+.form-errors {
+    color: red;
+}
+
+
+ #eventRegistration input {
+    height: 54px;
+ }
+
+.paymentDone img {
+    max-width: 30%;
+}
+
+.itemtable {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 50px;
+}

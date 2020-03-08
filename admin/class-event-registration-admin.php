@@ -116,7 +116,7 @@ class Event_Registration_Admin {
 		 */
 		add_menu_page(
 			'Events',
-			'Events',
+			'Event registratie',
 			'read',
 			'event',
             ['EventRegistration\Event_Registration_Admin_Display_Event_List' , 'render']
